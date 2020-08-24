@@ -5,10 +5,12 @@ import nikhil.spring.restapi.domain.Category;
 import nikhil.spring.restapi.repositories.CategoryRepository;
 import nikhil.spring.restapi.v1.mapper.CategoryMapper;
 import nikhil.spring.restapi.v1.model.CategoryDTO;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 @Slf4j
+@Service
 public class CategoryServiceImpl implements CategoryService {
 
     private final CategoryRepository categoryRepository;
