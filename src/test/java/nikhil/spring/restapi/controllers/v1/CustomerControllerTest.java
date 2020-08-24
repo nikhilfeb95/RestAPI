@@ -1,5 +1,7 @@
 package nikhil.spring.restapi.controllers.v1;
 
+import com.fasterxml.jackson.core.io.JsonStringEncoder;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import nikhil.spring.restapi.domain.Customer;
 import nikhil.spring.restapi.services.CustomerService;
 import nikhil.spring.restapi.v1.model.CustomerDTO;
@@ -22,6 +24,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -64,5 +67,27 @@ class CustomerControllerTest {
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", equalTo(1)));
+    }
+
+    @Test
+    void testCreateNewCustomer() throws Exception{
+        ObjectMapper objectMapper = new ObjectMapper();
+        CustomerDTO customerDTO = new CustomerDTO();
+        customerDTO.setFirstName("Giorno");
+        customerDTO.setLastName("Giovanna");
+
+        CustomerDTO returnDTO = new CustomerDTO();
+        returnDTO.setFirstName("Giorno");
+        returnDTO.setLastName("Giovanna");
+        returnDTO.setCustomer_url("/api/v1/customers/1");
+
+        when(customerService.createNewCustomer(customerDTO)).thenReturn(returnDTO);
+
+        mockMvc.perform(post("/api/v1/customers")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(customerDTO)))
+                        .andExpect(status().isCreated())
+                        .andExpect(jsonPath("$.customer_url", equalTo("/api/v1/customers/1")))
+                        .andExpect(jsonPath("$.firstName", equalTo("Giorno")));
     }
 }

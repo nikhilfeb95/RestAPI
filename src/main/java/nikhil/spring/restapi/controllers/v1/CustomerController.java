@@ -6,9 +6,7 @@ import nikhil.spring.restapi.v1.model.CustomerListDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/api/v1/customers")
@@ -30,5 +28,12 @@ public class CustomerController {
     {
         return new ResponseEntity<CustomerDTO>(
                 customerService.findCustomerById(id), HttpStatus.OK);
+    }
+
+    @PostMapping
+    private ResponseEntity<CustomerDTO> createNewCustomer(@RequestBody CustomerDTO customerDTO)
+    //Request body asks spring to look for customer DTO in the request body
+    {
+        return new ResponseEntity<CustomerDTO>(customerService.createNewCustomer(customerDTO), HttpStatus.CREATED);
     }
 }
