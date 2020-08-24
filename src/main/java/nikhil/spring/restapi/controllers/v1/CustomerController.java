@@ -36,4 +36,13 @@ public class CustomerController {
     {
         return new ResponseEntity<CustomerDTO>(customerService.createNewCustomer(customerDTO), HttpStatus.CREATED);
     }
+
+    @PutMapping({"/{id}"})
+    private ResponseEntity<CustomerDTO> updateCustomer( @PathVariable Long id,
+                                                        @RequestBody CustomerDTO customerDTO)
+    //Request body asks spring to look for customer DTO in the request body
+    {
+        return new ResponseEntity<CustomerDTO>(
+                customerService.saveCustomerByDTO(id,customerDTO), HttpStatus.OK);
+    }
 }
