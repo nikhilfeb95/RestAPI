@@ -45,4 +45,13 @@ public class CustomerController {
         return new ResponseEntity<CustomerDTO>(
                 customerService.saveCustomerByDTO(id,customerDTO), HttpStatus.OK);
     }
+
+    @PatchMapping({"/{id}"})
+    private ResponseEntity<CustomerDTO> patchCustomer( @PathVariable Long id,
+                                                        @RequestBody CustomerDTO customerDTO)
+    //Request body asks spring to look for customer DTO in the request body
+    {
+        return new ResponseEntity<CustomerDTO>(
+                customerService.saveCustomerByDTO(id,customerDTO), HttpStatus.OK);
+    }
 }

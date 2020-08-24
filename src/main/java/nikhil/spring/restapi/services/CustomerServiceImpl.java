@@ -1,6 +1,7 @@
 package nikhil.spring.restapi.services;
 
 import lombok.extern.slf4j.Slf4j;
+import nikhil.spring.restapi.controllers.v1.CustomerController;
 import nikhil.spring.restapi.domain.Customer;
 import nikhil.spring.restapi.repositories.CustomerRepository;
 import nikhil.spring.restapi.v1.mapper.CustomerMapper;
@@ -72,5 +73,25 @@ public class CustomerServiceImpl implements CustomerService {
         customer.setId(id);
 
         return saveAndReturnDTO(customer);
+    }
+
+    @Override
+    public CustomerDTO patchCustomer(Long id, CustomerDTO customerDTO) {
+        return customerRepository.findById(id).map(customer -> {
+
+            if(customerDTO.getFirstName() != null){
+                customer.setFirstName(customerDTO.getFirstName());
+            }
+
+            if(customerDTO.getLastName() != null){
+                customer.setLastName(customerDTO.getLastName());
+            }
+            CustomerDTO returnDTO = customerMapper.customerToCustomerDTO(
+                    customerRepository.save(customer));
+
+            returnDTO.setCustomer_url("/api/v1/customer/" + id);
+
+            return returnDTO;
+        }).orElseThrow(RuntimeException::new);
     }
 }
