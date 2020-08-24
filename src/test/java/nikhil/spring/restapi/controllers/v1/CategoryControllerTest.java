@@ -1,4 +1,4 @@
-package nikhil.spring.restapi.controllers;
+package nikhil.spring.restapi.controllers.v1;
 
 import nikhil.spring.restapi.controllers.v1.CategoryController;
 import nikhil.spring.restapi.services.CategoryService;
