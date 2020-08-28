@@ -53,4 +53,52 @@ class VendorServiceTest {
 
         assertEquals(returnVendor.getId(), vendor.getId());
     }
+
+    @Test
+    void createVendor() {
+        Vendor vendor = new Vendor();
+        vendor.setId(1L);
+
+        VendorDTO createdVendor = new VendorDTO();
+        createdVendor.setId(1L);
+
+        when(vendorRepository.save(any())).thenReturn(vendor);
+
+        VendorDTO returnVendor = vendorService.createVendor(createdVendor);
+
+        assertEquals(returnVendor.getId(), vendor.getId());
+    }
+
+    @Test
+    void saveVendor() {
+        Vendor vendor = new Vendor();
+        vendor.setId(1L);
+
+        VendorDTO createdVendor = new VendorDTO();
+        createdVendor.setId(1L);
+
+        when(vendorRepository.save(any())).thenReturn(vendor);
+
+        VendorDTO returnVendor = vendorService.saveVendorDTO(1L, createdVendor);
+
+        assertEquals(returnVendor.getId(), vendor.getId());
+    }
+
+    @Test
+    void patchVendor() {
+        Vendor vendor = new Vendor();
+        vendor.setId(1L);
+        vendor.setName("test");
+
+        VendorDTO createdVendor = new VendorDTO();
+        createdVendor.setId(1L);
+        createdVendor.setName("test");
+
+        when(vendorRepository.findById(anyLong())).thenReturn(Optional.of(vendor));
+
+        VendorDTO returnVendor = vendorService.patchVendor(1L, createdVendor);
+
+        assertEquals(returnVendor.getId(), vendor.getId());
+    }
+
 }

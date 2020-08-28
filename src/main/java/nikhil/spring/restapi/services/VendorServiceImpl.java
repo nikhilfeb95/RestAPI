@@ -41,4 +41,52 @@ public class VendorServiceImpl implements VendorService {
                 })
                 .orElseThrow(RuntimeException::new);
     }
+
+    @Override
+    public VendorDTO createVendor(VendorDTO vendorDTO) {
+        Vendor vendor = vendorMapper.venderDTOToVendor(vendorDTO);
+        Vendor savedVendor = vendorRepository.save(vendor);
+
+        VendorDTO returnDTO = vendorMapper.vendorToVendorDTO(savedVendor);
+        return returnDTO;
+    }
+
+    private VendorDTO saveAndReturnVendorDTO(Vendor vendor){
+        Vendor savedVendor = vendorRepository.save(vendor);
+
+        VendorDTO returnVendor = vendorMapper.vendorToVendorDTO(savedVendor);
+        returnVendor.setVendorUrl("/api/v1/vendors/" + savedVendor.getId());
+
+        return returnVendor;
+    }
+
+    @Override
+    public VendorDTO saveVendorDTO(Long id, VendorDTO vendorDTO) {
+        Vendor vendor = vendorMapper.venderDTOToVendor(vendorDTO);
+        vendor.setId(id);
+        return saveAndReturnVendorDTO(vendor);
+    }
+
+    @Override
+    public VendorDTO patchVendor(Long id, VendorDTO vendorDTO) {
+
+        return vendorRepository.findById(id)
+                .map(vendor -> {
+                    if(vendor.getName()!=null){
+                        vendor.setName(vendorDTO.getName());
+                    }
+
+                    VendorDTO returnVendor = vendorMapper.vendorToVendorDTO(vendor);
+                    returnVendor.setVendorUrl("/api/v1/vendors/" + id);
+
+                    return returnVendor;
+                }).orElseThrow(RuntimeException::new);
+    }
+
+    @Override
+    public void deleteVendor(Long id) {
+        vendorRepository.deleteById(id);
+    }
+
+
 }
