@@ -1,5 +1,7 @@
 package nikhil.spring.restapi.controllers.v1;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import nikhil.spring.restapi.services.CustomerService;
 import nikhil.spring.restapi.v1.model.CustomerDTO;
 import nikhil.spring.restapi.v1.model.CustomerListDTO;
@@ -8,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+@Api("Get/add or delete customers")
 @RestController
 @RequestMapping("/api/v1/customers")
 public class CustomerController {
@@ -23,6 +26,7 @@ public class CustomerController {
         return new CustomerListDTO(customerService.getAllCustomers());
     }
 
+    @ApiOperation(value = "This gets a list of customers", notes = "Returns List<CustomerDTO> objects")
     @GetMapping("{id}")
     @ResponseStatus(HttpStatus.OK)
     private CustomerDTO getCustomerById(@PathVariable Long id)
