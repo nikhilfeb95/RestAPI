@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-@Controller
+@RestController
 @RequestMapping("/api/v1/customers")
 public class CustomerController {
     private final CustomerService customerService;
@@ -18,46 +18,47 @@ public class CustomerController {
     }
 
     @GetMapping
-    private ResponseEntity<CustomerListDTO> getAllCustomers(){
-        return new ResponseEntity<CustomerListDTO>(
-                new CustomerListDTO(customerService.getAllCustomers()), HttpStatus.OK);
+    @ResponseStatus(HttpStatus.OK)
+    private CustomerListDTO getAllCustomers(){
+        return new CustomerListDTO(customerService.getAllCustomers());
     }
 
     @GetMapping("{id}")
-    private ResponseEntity<CustomerDTO> getCustomerById(@PathVariable Long id)
+    @ResponseStatus(HttpStatus.OK)
+    private CustomerDTO getCustomerById(@PathVariable Long id)
     {
-        return new ResponseEntity<CustomerDTO>(
-                customerService.findCustomerById(id), HttpStatus.OK);
+        return customerService.findCustomerById(id);
     }
 
     @PostMapping
-    private ResponseEntity<CustomerDTO> createNewCustomer(@RequestBody CustomerDTO customerDTO)
+    @ResponseStatus(HttpStatus.CREATED)
+    private CustomerDTO createNewCustomer(@RequestBody CustomerDTO customerDTO)
     //Request body asks spring to look for customer DTO in the request body
     {
-        return new ResponseEntity<CustomerDTO>(customerService.createNewCustomer(customerDTO), HttpStatus.CREATED);
+        return customerService.createNewCustomer(customerDTO);
     }
 
     @PutMapping({"/{id}"})
-    private ResponseEntity<CustomerDTO> updateCustomer( @PathVariable Long id,
+    @ResponseStatus(HttpStatus.OK)
+    private CustomerDTO updateCustomer( @PathVariable Long id,
                                                         @RequestBody CustomerDTO customerDTO)
     //Request body asks spring to look for customer DTO in the request body
     {
-        return new ResponseEntity<CustomerDTO>(
-                customerService.saveCustomerByDTO(id,customerDTO), HttpStatus.OK);
+        return customerService.saveCustomerByDTO(id,customerDTO);
     }
 
     @PatchMapping({"/{id}"})
-    private ResponseEntity<CustomerDTO> patchCustomer( @PathVariable Long id,
+    @ResponseStatus(HttpStatus.OK)
+    private CustomerDTO patchCustomer( @PathVariable Long id,
                                                         @RequestBody CustomerDTO customerDTO)
     {
-        return new ResponseEntity<CustomerDTO>(
-                customerService.saveCustomerByDTO(id,customerDTO), HttpStatus.OK);
+        return customerService.saveCustomerByDTO(id,customerDTO);
     }
 
     @DeleteMapping({"/{id}"})
-    private ResponseEntity<Void> deleteCustomer( @PathVariable Long id)
+    @ResponseStatus(HttpStatus.OK)
+    private void deleteCustomer( @PathVariable Long id)
     {
         customerService.deleteCustomerById(id);
-        return new ResponseEntity<Void>(HttpStatus.OK);
     }
 }
